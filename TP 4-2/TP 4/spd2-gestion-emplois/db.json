@@ -1,0 +1,53 @@
+
+{
+  "jobs": [
+    {
+      "id": "1",
+      "title": "Développeur Front-end Vue.js",
+      "company": "Atlas Digital",
+      "location": "Casablanca, Maroc",
+      "type": "Stage",
+      "salary": 4500,
+      "description": "Participer au développement d'interfaces web modernes avec Vue.js et JavaScript.",
+      "experience": 0,
+      "createdAt": "2026-10-20",
+      "requirements": "HTML, CSS, JavaScript et bases de Vue.js."
+    },
+    {
+      "id": "2",
+      "title": "Développeur Java / Spring Boot",
+      "company": "TechNova",
+      "location": "Rabat, Maroc",
+      "type": "CDI",
+      "salary": 12000,
+      "description": "Concevoir des API REST et participer au développement des services backend.",
+      "experience": 2,
+      "createdAt": "2026-10-18",
+      "requirements": "Java, Spring Boot, SQL et Git."
+    },
+    {
+      "id": "3",
+      "title": "Data Analyst Junior",
+      "company": "DataMaroc",
+      "location": "Marrakech, Maroc",
+      "type": "CDD",
+      "salary": 8000,
+      "description": "Analyser des données et créer des tableaux de bord pour les équipes métier.",
+      "experience": 1,
+      "createdAt": "2026-10-12",
+      "requirements": "SQL, Excel et notions de Python."
+    },
+    {
+      "id": "4",
+      "title": "Développeur Full-stack",
+      "company": "Pixel Factory",
+      "location": "Télétravail",
+      "type": "CDI",
+      "salary": 14000,
+      "description": "Développer des fonctionnalités frontend et backend et participer aux choix techniques.",
+      "experience": 3,
+      "createdAt": "2026-10-05",
+      "requirements": "JavaScript, framework frontend, API REST et base de données."
+    }
+  ]
+}

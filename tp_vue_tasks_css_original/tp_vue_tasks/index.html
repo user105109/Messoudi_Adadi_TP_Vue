@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des tâches</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        img {
+            float: left;
+            margin-right: 1rem;
+        }
+        .personne {
+            clear: left;
+            padding: 1rem;
+        }
+        input[type="checkbox"], select {
+            margin-right: 1rem;
+        }
+        .misEnForme {
+            background: #e0ffff;
+            font-family: georgia;
+            font-size: 1.2rem;
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <task-list></task-list>
+    </div>
+
+    <script>
+        const TaskList = {
+            data() {
+                return {
+                    tasks: [],
+                    filtre: 'toutes',
+                    chargement: true,
+                    erreur: ''
+                };
+            },
+
+            computed: {
+                totalTaches() {
+                    return this.tasks.length;
+                },
+
+                tachesAFaire() {
+                    return this.tasks.filter(tache => !tache.completed).length;
+                },
+
+                tachesTerminees() {
+                    return this.tasks.filter(tache => tache.completed).length;
+                },
+
+                tachesFiltrees() {
+                    if (this.filtre === 'aFaire') {
+                        return this.tasks.filter(tache => !tache.completed);
+                    }
+
+                    if (this.filtre === 'terminees') {
+                        return this.tasks.filter(tache => tache.completed);
+                    }
+
+                    return this.tasks;
+                }
+            },
+
+            methods: {
+                marquerTerminee(tache) {
+                    tache.completed = true;
+                }
+            },
+
+            async mounted() {
+                try {
+                    const reponse = await fetch('./tasks.json');
+
+                    if (!reponse.ok) {
+                        throw new Error('Le fichier tasks.json est introuvable.');
+                    }
+
+                    this.tasks = await reponse.json();
+                } catch (e) {
+                    this.erreur = 'Impossible de charger tasks.json. Lancez la page avec Live Server ou un serveur local.';
+                    console.error(e);
+                } finally {
+                    this.chargement = false;
+                }
+            },
+
+            template: `
+                <div>
+                    <h1>Gestion des tâches</h1>
+
+                    <p>
+                        Total des tâches : <strong>{{ totalTaches }}</strong><br>
+                        Tâches à faire : <strong>{{ tachesAFaire }}</strong><br>
+                        Tâches terminées : <strong>{{ tachesTerminees }}</strong>
+                    </p>
+
+                    <fieldset>
+                        <legend>Filtrer les tâches</legend>
+
+                        <button
+                            @click="filtre = 'toutes'"
+                            :class="{ misEnForme: filtre === 'toutes' }">
+                            Toutes
+                        </button>
+
+                        <button
+                            @click="filtre = 'aFaire'"
+                            :class="{ misEnForme: filtre === 'aFaire' }">
+                            À faire
+                        </button>
+
+                        <button
+                            @click="filtre = 'terminees'"
+                            :class="{ misEnForme: filtre === 'terminees' }">
+                            Terminées
+                        </button>
+                    </fieldset>
+
+                    <p v-if="chargement">Chargement des tâches...</p>
+                    <p v-else-if="erreur">{{ erreur }}</p>
+
+                    <div v-else>
+                        <div
+                            class="personne"
+                            v-for="tache in tachesFiltrees"
+                            :key="tache.id"
+                            :class="{ misEnForme: tache.completed }">
+
+                            <h3>{{ tache.title }}</h3>
+                            <p>{{ tache.description }}</p>
+                            <p>
+                                État :
+                                <strong>{{ tache.completed ? 'Terminée' : 'À faire' }}</strong>
+                            </p>
+
+                            <button
+                                v-show="!tache.completed"
+                                @click="marquerTerminee(tache)">
+                                Marquer comme terminée
+                            </button>
+                        </div>
+
+                        <p v-if="tachesFiltrees.length === 0">
+                            Aucune tâche dans ce filtre.
+                        </p>
+                    </div>
+                </div>
+            `
+        };
+
+        const app = Vue.createApp({});
+        app.component('task-list', TaskList);
+        app.mount('#app');
+    </script>
+</body>
+</html>
